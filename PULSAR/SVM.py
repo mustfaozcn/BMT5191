@@ -48,8 +48,17 @@ def evaluate_model(model, X_train, y_train, X_test, y_test):
     test_accuracy = np.mean(model.predict(X_test) == y_test)
     print(f"Training Set Accuracy: {train_accuracy}")
     print(f"Test Set Accuracy: {test_accuracy}")
-    print("Confusion Matrix:\n", confusion_matrix(y_test, model.predict(X_test)))
-    print("\nClassification Report:\n", classification_report(y_test, model.predict(X_test)))
+
+    matrix = confusion_matrix(y_test, model.predict(X_test))
+    print("Confusion Matrix:\n", matrix)
+
+    # classification_report çıktısını alın
+    report = classification_report(y_test, model.predict(X_test))
+    print("\nClassification Report:\n", report)
+
+    # raporu bir dosyaya yazın
+    with open(f"{model.kernel}_classification_report.txt", 'w') as f:
+        f.write(report)
 
 
 def plot_svm(X_train, y_train, X_test, y_test, model, kernel):
@@ -97,13 +106,17 @@ if __name__ == '__main__':
     visualize_data(X, y)
 
     linear_svm_model = train_linear_svm(X_train, y_train)
+    evaluate_model(linear_svm_model, X_train, y_train, X_test, y_test)
     plot_svm(X_train, y_train, X_test, y_test, linear_svm_model, 'linear')
 
     multi_kernel_svm_model = train_multi_kernel_svm(X_train, y_train)
+    evaluate_model(multi_kernel_svm_model, X_train, y_train, X_test, y_test)
     plot_svm(X_train, y_train, X_test, y_test, multi_kernel_svm_model, 'multi_kernel')
 
     polynomial_svm_model = train_polynomial_svm(X_train, y_train)
+    evaluate_model(polynomial_svm_model, X_train, y_train, X_test, y_test)
     plot_svm(X_train, y_train, X_test, y_test, polynomial_svm_model, 'polynomial')
 
     rbf_svm_model = train_rbf_svm(X_train, y_train)
+    evaluate_model(rbf_svm_model, X_train, y_train, X_test, y_test)
     plot_svm(X_train, y_train, X_test, y_test, rbf_svm_model, 'rbf')
